@@ -1,0 +1,53 @@
+*** Settings ***
+Resource    ../IntranetHolidayList/Resources/holiday_resources.txt
+
+*** Keywords ***
+Open Browser and Login
+    set selenium speed    5 seconds
+    seleniumlibrary.set selenium implicit wait    5 seconds
+    SeleniumLibrary.open browser    ${URL}    ${Browser}
+    SeleniumLibrary.maximize browser window
+    Login To Intranet
+
+close Browser
+    close all browsers
+    run keyword if test failed    Log Screenshot
+
+Log Screenshot
+    capture page screenshot
+
+Login To Intranet
+    input text    CSS:${CSS_Username}     ${Username}
+    input text    CSS:${CSS_Password}    ${Password}
+    click button    CSS:${CSS_LoginSubmit}
+
+Check Holiday Title
+    ${HolidayTitle}=    get text    ${CSS_HolidayLabel}
+    should be equal    ${HolidayTitle}    ${HolidayLabel}
+
+Select Year And Branch
+    [Arguments]    ${Year}    ${Branch}
+    click element    //select[@id='holiday_year']/option[@value='${Year}']
+    click element    //select[@id='branch_id']/option[@value='${Branch}']
+    click button    CSS:${CSS_HolidaySubmit}
+
+Click APagination
+    [Arguments]    ${Var}
+    execute javascript    window.scrollTo(0,400)
+    click element    //ul[@class='pagination pagination-lg']/li[${Var}]
+    ${Var}=    evaluate    ${Var}+1
+    ${APaginationCount}=    set global variable    ${Var}
+    [Return]    ${APaginationCount}
+
+Click PPagination
+    [Arguments]    ${Var1}
+    execute javascript    window.scrollTo(0,400)
+    click element    //ul[@class='pagination pagination-lg']/li[${Var1}]
+    ${Var1}=    evaluate    ${Var1}+1
+    ${PPaginationCount}=    set global variable    ${Var1}
+    [Return]    ${PPaginationCount}
+
+Nothing
+    [Return]    0
+
+

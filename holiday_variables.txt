@@ -1,0 +1,10 @@
+*** Variables ***
+${CSS_Username}    input[name='username']
+${CSS_Password}    input[name='password']
+${CSS_LoginSubmit}    button.login100-form-btn
+${CSS_Home}    li.dropdown>a.dropdown-toggle
+${XPATH_HolidayList}    //ul/li[@class='dropdown-item']/a[text()='Holiday List']
+${CSS_HolidayLabel}    h4.top_heading_text
+${CSS_HolidaySubmit}    button#btn_submit_holiday
+${XPATH_Pagination}    //ul[@class='pagination pagination-lg']/li
+${CSS_Tables}    tbody>tr

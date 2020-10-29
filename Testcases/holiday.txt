@@ -1,0 +1,93 @@
+*** Settings ***
+Resource    ../Resources/holiday_resources.txt
+Library    ../../IntranetHolidayList/RobotPython.py
+Library    Collections
+test setup    Open Browser and Login
+test teardown    close Browser
+force tags    TC_001
+
+*** Variables ***
+${Count}    0
+${APaginationCount}   1
+${PPaginationCount}   1
+
+*** Test Cases ***
+Compariosn of Holiday List of Ahmedabad and Pune
+    seleniumlibrary.set selenium implicit wait    10 seconds
+    set selenium speed    3 seconds
+    mouse over    CSS:${CSS_Home}
+    click element    ${XPATH_HolidayList}
+    #Check Holiday Title
+    Select Year And Branch    ${Year}    ${Branch}
+
+    # Ahmedabad Location Holiday List Count
+    ${AhmedabadCount}=    get element count   css:${CSS_Tables}
+    ${AhmedabadDictionary}=    create dictionary
+    @{AhmedabadList}=    create list
+    @{PuneList}=    create list
+
+
+    # Below For Loop will fetch the description of Ahmedabad Branch
+    FOR    ${i}    IN RANGE    ${AhmedabadCount}
+        ${Result}=    evaluate    ${j}%10
+
+        # Count Keyword retrieves the value of which Pagination will be clicked
+        ${APaginationCount}=    Run Keyword If    ${Result} == 0     PaginationACount
+                   ...               ELSE    Nothing
+
+        ${APaginationCount}=    run keyword if    ${j}%10 == 0    Click APagination    ${APaginationCount}
+                    ...              ELSE    Nothing
+
+        # ${Description} holds the value of the Holiday
+        ${Description1}=    get text    //table/tbody/tr[${i}+1]/td[4]
+        Append To List    ${AhmedabadList}    ${Description1}
+
+        # Value of the Holiday will be stored in Ahmedabad Dictionary
+
+        ${j}=    evaluate    ${j}+1
+    END
+    set to dictionary   ${AhmedabadDictionary}    1    ${AhmedabadList}
+    # Select Year 2020 and Branch as Pune
+    Select Year And Branch    ${Year1}    ${Branch1}
+
+     # Pune Location Holiday List Count
+    ${PuneCount}=    get element count   css:${CSS_Tables}
+    ${PuneDictionary}=    create dictionary
+
+
+     # Below For Loop will fetch the description of Ahmedabad Branch
+    FOR    ${i}    IN RANGE     ${PuneCount}
+           ${Result}=    evaluate    ${k}%10
+
+            # Count Keyword retrieves the value of which Pagination will be clicked
+           ${PPaginationCount}=    Run Keyword If    ${Result} == 0     PaginationPCount
+                       ...               ELSE    Nothing
+
+           ${PPaginationCount}=    run keyword if    ${k}%10 == 0    Click PPagination    ${PPaginationCount}
+                        ...              ELSE    Nothing
+
+           # ${Description} holds the value of the Holiday
+           ${Description}=    get text    //table/tbody/tr[${i}+1]/td[4]
+           Append To List    ${PuneList}    ${Description}
+        # Value of the Holiday will be stored in Ahmedabad Dictionary
+
+        ${k}=    evaluate    ${k}+1
+
+    END
+    set to dictionary    ${PuneDictionary}    1    ${PuneList}
+    # Function will comapre dictonaries
+    log    Comparing Pune Holiday List with Ahmedabad
+    CompareDict    ${PuneDictionary}    ${AhmedabadDictionary}
+    log    Comparing Ahmedabad Holiday List with Pune
+    CompareDict    ${AhmedabadDictionary}    ${PuneDictionary}
+
+*** Keywords ***
+PaginationACount
+    ${APaginationCount}=    Evaluate    ${APaginationCount}+1
+    Set Global Variable      ${APaginationCount}
+    [Return]    ${APaginationCount}
+
+PaginationPCount
+    ${PPaginationCount}=    Evaluate    ${PPaginationCount}+1
+    Set Global Variable      ${PPaginationCount}
+    [Return]    ${PPaginationCount}

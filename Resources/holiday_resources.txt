@@ -1,0 +1,15 @@
+*** Settings ***
+#Author Shefali Shah
+Library    SeleniumLibrary
+Library    Collections
+#Library    Selenium2Library
+Resource    ../../IntranetHolidayList/holiday_labels.txt
+Resource    ../../IntranetHolidayList/holiday_variables.txt
+Library    OperatingSystem
+Resource    ../../IntranetHolidayList/holiday_keywords.txt
+
+
+
+set selenium timeout    10 seconds
+
+

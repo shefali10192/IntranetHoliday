@@ -1,0 +1,14 @@
+*** Variables ***
+${URL}  https://intranet.einfochips.com/employee_intranet/portal/user/dashboard
+${Browser}  Chrome
+${Username}    shefali.shah
+${Password}    Shefalishah1010@
+${HolidayLabel}    Holiday List
+
+${Year}    2020
+${Branch}    Ahmedabad
+
+${Year1}    2020
+${Branch1}    Pune
+${j}    1
+${k}    1
